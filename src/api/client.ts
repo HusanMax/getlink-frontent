@@ -3,7 +3,7 @@ import axios, { AxiosError } from 'axios';
 export const TOKEN_KEY = 'rh_token';
 
 export const api = axios.create({
-  baseURL: import.meta.env.VITE_API_URL ?? 'http://localhost:3000/api',
+  baseURL: import.meta.env.API_URL ?? 'http://localhost:3000/api',
   headers: { 'Content-Type': 'application/json' },
   timeout: 20000,
 });
