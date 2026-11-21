@@ -1,9 +1,11 @@
+import { useState } from 'react';
 import { ArrowUpRight, Quote, Star, Youtube as YoutubeIcon, Send } from 'lucide-react';
 import type { Resource } from '../../types';
 import { sectionByType } from '../../lib/sections';
 import { getReason, hostname } from '../../lib/format';
 import { LazyImage } from '../ui/LazyImage';
 import { Badge } from '../ui/Badge';
+import { Modal } from '../ui/Modal';
 import { cn } from '../../lib/cn';
 
 interface ResourceCardProps {
@@ -16,19 +18,38 @@ export function ResourceCard({ resource, index = 0 }: ResourceCardProps) {
   const reason = getReason(resource);
   const isBook = resource.type === 'book';
   const isMovie = resource.type === 'movie';
+  const hasDetails = isBook || isMovie;
+  const [detailsOpen, setDetailsOpen] = useState(false);
 
   return (
+    <>
     <article
       data-section={resource.type}
+      {...(hasDetails
+        ? {
+            role: 'button',
+            tabIndex: 0,
+            onClick: () => setDetailsOpen(true),
+            onKeyDown: (e: React.KeyboardEvent) => {
+              if (e.target === e.currentTarget && (e.key === 'Enter' || e.key === ' ')) {
+                e.preventDefault();
+                setDetailsOpen(true);
+              }
+            },
+          }
+        : {})}
       style={{ animationDelay: `${Math.min(index, 8) * 45}ms` }}
-      className="card card-hover group flex animate-in flex-col overflow-hidden"
+      className={cn(
+        'card card-hover group flex animate-in flex-col overflow-hidden',
+        hasDetails && 'cursor-pointer',
+      )}
     >
       {/* Media */}
       <div className="relative">
         <LazyImage
           src={resource.image}
           alt={resource.title}
-          wrapperClassName={cn('w-full', isMovie ? 'h-72' : isBook ? 'h-60' : 'h-44')}
+          wrapperClassName={cn('w-full', isMovie ? 'h-72' : isBook ? 'aspect-[2/3]' : 'h-44')}
           className="transition-transform duration-500 group-hover:scale-[1.04]"
         />
 
@@ -91,7 +112,21 @@ export function ResourceCard({ resource, index = 0 }: ResourceCardProps) {
           <p className="mt-0.5 truncate text-xs text-content-subtle">{hostname(resource.url)}</p>
         )}
 
-        {reason ? (
+        {isBook ? (
+          <>
+            {resource.description && (
+              <p className="mt-3 line-clamp-3 text-sm leading-relaxed text-content-muted">
+                {resource.description}
+              </p>
+            )}
+            {reason && (
+              <blockquote className="mt-3 flex gap-2 rounded-lg border-l-2 border-[rgb(var(--section)/0.6)] bg-surface-3/60 py-2 pl-3 pr-2">
+                <Quote className="mt-0.5 h-3.5 w-3.5 shrink-0 text-[rgb(var(--section))]" aria-hidden />
+                <p className="line-clamp-2 text-[13px] italic leading-relaxed text-content-muted">{reason}</p>
+              </blockquote>
+            )}
+          </>
+        ) : reason ? (
           <blockquote className="mt-3 flex gap-2 rounded-lg border-l-2 border-[rgb(var(--section)/0.6)] bg-surface-3/60 py-2 pl-3 pr-2">
             <Quote className="mt-0.5 h-3.5 w-3.5 shrink-0 text-[rgb(var(--section))]" aria-hidden />
             <p className="line-clamp-3 text-[13px] italic leading-relaxed text-content-muted">{reason}</p>
@@ -115,6 +150,7 @@ export function ResourceCard({ resource, index = 0 }: ResourceCardProps) {
             href={resource.url}
             target="_blank"
             rel="noopener noreferrer"
+            onClick={(e) => e.stopPropagation()}
             className="btn btn-secondary btn-sm w-full group-hover:border-[rgb(var(--section)/0.6)] group-hover:text-[rgb(var(--section))]"
           >
             Ochish
@@ -123,5 +159,52 @@ export function ResourceCard({ resource, index = 0 }: ResourceCardProps) {
         </div>
       </div>
     </article>
+
+    {hasDetails && (
+      <Modal
+        open={detailsOpen}
+        onClose={() => setDetailsOpen(false)}
+        title={resource.title}
+        description={isBook ? (resource.author ?? undefined) : undefined}
+        className="max-h-[90vh] max-w-2xl overflow-y-auto"
+      >
+        <div data-section={resource.type} className="space-y-4">
+          <div className="flex gap-4">
+            <LazyImage
+              src={resource.image}
+              alt={resource.title}
+              wrapperClassName="aspect-[2/3] w-28 shrink-0 overflow-hidden rounded-lg sm:w-36"
+            />
+            <div className="min-w-0 space-y-2 text-sm text-content-muted">
+              <div className="flex flex-wrap gap-1.5">
+                {resource.category && <Badge tone="section">{resource.category.name}</Badge>}
+                {resource.year && <span className="chip px-2 py-0.5 text-[11px]">{resource.year}</span>}
+              </div>
+              {resource.tags.length > 0 && (
+                <div className="flex flex-wrap gap-1.5">
+                  {resource.tags.map((t) => (
+                    <span key={t.id} className="chip px-2 py-0.5 text-[11px]">#{t.slug}</span>
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
+          {resource.description && (
+            <p className="whitespace-pre-line text-sm leading-relaxed text-content-muted">{resource.description}</p>
+          )}
+          {reason && (
+            <blockquote className="flex gap-2 rounded-lg border-l-2 border-[rgb(var(--section)/0.6)] bg-surface-3/60 py-2 pl-3 pr-2">
+              <Quote className="mt-0.5 h-3.5 w-3.5 shrink-0 text-[rgb(var(--section))]" aria-hidden />
+              <p className="whitespace-pre-line text-[13px] italic leading-relaxed text-content-muted">{reason}</p>
+            </blockquote>
+          )}
+          <a href={resource.url} target="_blank" rel="noopener noreferrer" className="btn btn-primary w-full">
+            Ochish
+            <ArrowUpRight className="h-4 w-4" aria-hidden />
+          </a>
+        </div>
+      </Modal>
+    )}
+    </>
   );
 }

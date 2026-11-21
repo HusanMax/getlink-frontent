@@ -3,3 +3,8 @@ dist
 .env
 .env.local
 .env.*.local
+
+# AI yordamchi fayllari
+.claude/
+CLAUDE.md
+.mcp.json
