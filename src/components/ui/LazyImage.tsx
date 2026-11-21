@@ -24,6 +24,15 @@ export function LazyImage({ src, alt, className, wrapperClassName, fit = 'cover'
           <ImageOff className="h-8 w-8" aria-hidden />
         </div>
       ) : (
+        <>
+        {fit === 'contain' && (
+          <img
+            src={src ?? undefined}
+            alt=""
+            aria-hidden
+            className="absolute inset-0 h-full w-full scale-125 object-cover opacity-70 blur-2xl"
+          />
+        )}
         <img
           src={src ?? undefined}
           alt={alt}
@@ -32,12 +41,13 @@ export function LazyImage({ src, alt, className, wrapperClassName, fit = 'cover'
           onLoad={() => setLoaded(true)}
           onError={() => setFailed(true)}
           className={cn(
-            'h-full w-full transition-opacity duration-500',
+            'relative h-full w-full transition-opacity duration-500',
             fit === 'contain' ? 'object-contain' : 'object-cover',
             loaded ? 'opacity-100' : 'opacity-0',
             className,
           )}
         />
+        </>
       )}
     </div>
   );
