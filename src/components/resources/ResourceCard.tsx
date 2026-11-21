@@ -49,7 +49,8 @@ export function ResourceCard({ resource, index = 0 }: ResourceCardProps) {
         <LazyImage
           src={resource.image}
           alt={resource.title}
-          wrapperClassName={cn('w-full', isMovie ? 'h-72' : isBook ? 'aspect-[2/3]' : 'h-44')}
+          wrapperClassName={cn('w-full', hasDetails ? 'aspect-[2/3]' : 'h-44')}
+          fit={hasDetails ? 'contain' : 'cover'}
           className="transition-transform duration-500 group-hover:scale-[1.04]"
         />
 
@@ -174,6 +175,7 @@ export function ResourceCard({ resource, index = 0 }: ResourceCardProps) {
               src={resource.image}
               alt={resource.title}
               wrapperClassName="aspect-[2/3] w-28 shrink-0 overflow-hidden rounded-lg sm:w-36"
+              fit="contain"
             />
             <div className="min-w-0 space-y-2 text-sm text-content-muted">
               <div className="flex flex-wrap gap-1.5">

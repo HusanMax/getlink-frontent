@@ -7,9 +7,10 @@ interface LazyImageProps {
   alt: string;
   className?: string;
   wrapperClassName?: string;
+  fit?: 'cover' | 'contain';
 }
 
-export function LazyImage({ src, alt, className, wrapperClassName }: LazyImageProps) {
+export function LazyImage({ src, alt, className, wrapperClassName, fit = 'cover' }: LazyImageProps) {
   const [loaded, setLoaded] = useState(false);
   const [failed, setFailed] = useState(false);
 
@@ -31,7 +32,8 @@ export function LazyImage({ src, alt, className, wrapperClassName }: LazyImagePr
           onLoad={() => setLoaded(true)}
           onError={() => setFailed(true)}
           className={cn(
-            'h-full w-full object-cover transition-opacity duration-500',
+            'h-full w-full transition-opacity duration-500',
+            fit === 'contain' ? 'object-contain' : 'object-cover',
             loaded ? 'opacity-100' : 'opacity-0',
             className,
           )}
