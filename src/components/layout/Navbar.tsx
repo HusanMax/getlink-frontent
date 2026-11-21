@@ -38,7 +38,7 @@ export function Navbar() {
       )}
     >
       <div className="mx-auto flex h-16 max-w-7xl items-center gap-4 px-4 sm:px-6 lg:px-8">
-        <Link to="/" className="group flex items-center gap-2.5" aria-label="Resource Hub bosh sahifasi">
+        <Link to="/" className="group flex shrink-0 items-center gap-2.5" aria-label="Resource Hub bosh sahifasi">
           <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-brand to-accent text-white shadow-sm">
             <Command className="h-5 w-5" aria-hidden />
           </span>
@@ -67,16 +67,16 @@ export function Navbar() {
               onChange={(e) => setQuery(e.target.value)}
               placeholder="Hammasini qidiring…"
               aria-label="Global qidiruv"
-              className="input h-9 w-52 pl-9 text-[13px] transition-all focus:w-64 lg:w-44"
+              className="input h-9 w-52 pl-9 text-[13px] transition-all focus:w-64 lg:w-36 xl:w-44"
             />
           </div>
         </form>
 
         <div className="ml-auto flex items-center gap-2 md:ml-0">
           <ThemeToggle />
-          <Link to="/admin" className="btn btn-secondary btn-sm hidden sm:inline-flex">
+          <Link to="/admin" aria-label="Boshqaruv paneli" className="btn btn-secondary btn-sm hidden sm:inline-flex">
             <LayoutDashboard className="h-4 w-4" aria-hidden />
-            Boshqaruv
+            <span className="hidden xl:inline">Boshqaruv</span>
           </Link>
           <button
             type="button"
@@ -140,7 +140,7 @@ function NavItem({
       data-section={section}
       className={({ isActive }) =>
         cn(
-          'rounded-lg px-3 py-2 text-sm font-medium transition-colors',
+          'whitespace-nowrap rounded-lg px-2.5 py-2 text-sm font-medium transition-colors xl:px-3',
           isActive
             ? 'text-[rgb(var(--section))]'
             : 'text-content-muted hover:bg-surface-3 hover:text-content',
