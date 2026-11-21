@@ -75,12 +75,18 @@ export function ResourceCard({ resource, index = 0 }: ResourceCardProps) {
 
         {/* top-left badges */}
         <div className="absolute left-3 top-3 flex flex-wrap gap-1.5">
-          {resource.category && <Badge tone="section">{resource.category.name}</Badge>}
+          {resource.category && (
+            <span className="rounded-full bg-black/75 shadow-md backdrop-blur-sm">
+              <Badge tone="section">{resource.category.name}</Badge>
+            </span>
+          )}
           {resource.featured && (
-            <Badge tone="warning">
-              <Star className="h-3 w-3 fill-current" aria-hidden />
-              Tanlangan
-            </Badge>
+            <span className="rounded-full bg-black/75 shadow-md backdrop-blur-sm">
+              <Badge tone="warning">
+                <Star className="h-3 w-3 fill-current" aria-hidden />
+                Tanlangan
+              </Badge>
+            </span>
           )}
         </div>
 
