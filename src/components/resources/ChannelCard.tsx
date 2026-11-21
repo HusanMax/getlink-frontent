@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Play, Star, Youtube as YoutubeIcon } from 'lucide-react';
+import { Play, Star } from 'lucide-react';
 import type { Resource } from '../../types';
 import { cn } from '../../lib/cn';
 
@@ -23,30 +23,18 @@ export function ChannelCard({ resource, index = 0 }: { resource: Resource; index
     <article
       data-section="youtube"
       style={{ animationDelay: `${Math.min(index, 8) * 45}ms` }}
-      className="card card-hover group flex animate-in flex-col overflow-hidden"
+      className="card card-hover group relative flex animate-in flex-col overflow-hidden"
     >
-      {/* YouTube-style channel banner */}
-      <div className="relative h-20 bg-gradient-to-r from-red-600/80 via-red-500/50 to-orange-500/40">
-        <div
-          className="absolute inset-0 opacity-30"
-          style={{
-            backgroundImage:
-              'radial-gradient(circle at 20% 120%, rgba(255,255,255,.5), transparent 55%)',
-          }}
-          aria-hidden
-        />
-        <YoutubeIcon className="absolute right-4 top-4 h-6 w-6 text-white/70" aria-hidden />
-        {resource.featured && (
-          <span className="absolute left-3 top-3 inline-flex items-center gap-1 rounded-full bg-black/60 px-2 py-0.5 text-[11px] font-semibold text-amber-300 backdrop-blur-sm">
-            <Star className="h-3 w-3 fill-current" aria-hidden />
-            Tanlangan
-          </span>
-        )}
-      </div>
+      {resource.featured && (
+        <span className="absolute left-3 top-3 inline-flex items-center gap-1 rounded-full bg-amber-500/15 px-2 py-0.5 text-[11px] font-semibold text-amber-500">
+          <Star className="h-3 w-3 fill-current" aria-hidden />
+          Tanlangan
+        </span>
+      )}
 
       {/* Round avatar */}
-      <div className="-mt-10 flex justify-center">
-        <div className="h-20 w-20 overflow-hidden rounded-full border-4 border-surface-2 bg-surface-3 shadow-lg ring-2 ring-red-500/60 transition-transform duration-300 group-hover:scale-105">
+      <div className="flex justify-center pt-7">
+        <div className="h-20 w-20 overflow-hidden rounded-full bg-surface-3 shadow-md ring-2 ring-red-500/60 ring-offset-2 ring-offset-surface-2 transition-transform duration-300 group-hover:scale-105">
           {showImage ? (
             <img
               src={resource.image ?? undefined}
