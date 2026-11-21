@@ -5,6 +5,7 @@ import { sectionByType } from '../../lib/sections';
 import { getReason, hostname } from '../../lib/format';
 import { LazyImage } from '../ui/LazyImage';
 import { Badge } from '../ui/Badge';
+import { ChannelCard } from './ChannelCard';
 import { Modal } from '../ui/Modal';
 import { cn } from '../../lib/cn';
 
@@ -13,7 +14,12 @@ interface ResourceCardProps {
   index?: number;
 }
 
-export function ResourceCard({ resource, index = 0 }: ResourceCardProps) {
+export function ResourceCard(props: ResourceCardProps) {
+  if (props.resource.type === 'youtube') return <ChannelCard {...props} />;
+  return <DetailedCard {...props} />;
+}
+
+function DetailedCard({ resource, index = 0 }: ResourceCardProps) {
   const section = sectionByType(resource.type);
   const reason = getReason(resource);
   const isBook = resource.type === 'book';
