@@ -11,6 +11,7 @@ import { CategoryFilter, FilterChip } from '../filters/CategoryFilter';
 import { SECTION_LIST } from '../../lib/sections';
 import { TagFilter } from '../filters/TagFilter';
 import { ResourceControls } from '../filters/ResourceControls';
+import { MasonryGrid } from './MasonryGrid';
 import { ResourceCard } from '../resources/ResourceCard';
 import { CardGridSkeleton } from '../ui/Skeletons';
 import { EmptyState } from '../ui/EmptyState';
@@ -210,11 +211,19 @@ export function ResourceExplorer({
             <p className="mb-4 text-sm text-content-muted">
               {data.meta.total} ta natija
             </p>
-            <div className={GRID}>
-              {data.items.map((resource, i) => (
-                <ResourceCard key={resource.id} resource={resource} index={i} />
-              ))}
-            </div>
+            {effectiveType ? (
+              <div className={GRID}>
+                {data.items.map((resource, i) => (
+                  <ResourceCard key={resource.id} resource={resource} index={i} />
+                ))}
+              </div>
+            ) : (
+              <MasonryGrid>
+                {data.items.map((resource, i) => (
+                  <ResourceCard key={resource.id} resource={resource} index={i} />
+                ))}
+              </MasonryGrid>
+            )}
           </>
         )}
       </div>

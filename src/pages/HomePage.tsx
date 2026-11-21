@@ -9,6 +9,7 @@ import { SECTION_LIST, SECTIONS } from '../lib/sections';
 import { formatCount } from '../lib/format';
 import { TypeCard } from '../components/common/TypeCard';
 import { SectionHeader } from '../components/common/SectionHeader';
+import { MasonryGrid } from '../components/resources/MasonryGrid';
 import { ResourceCard } from '../components/resources/ResourceCard';
 import { Button } from '../components/ui/Button';
 
@@ -138,7 +139,7 @@ export function HomePage() {
                 </Button>
               }
             />
-            <div className="mt-6 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+            <div className={loading ? 'mt-6 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4' : 'mt-6'}>
               {loading
                 ? Array.from({ length: 4 }).map((_, i) => (
                     <div key={i} className="card overflow-hidden">
@@ -150,7 +151,13 @@ export function HomePage() {
                       </div>
                     </div>
                   ))
-                : featured.map((r, i) => <ResourceCard key={r.id} resource={r} index={i} />)}
+                : (
+                  <MasonryGrid>
+                    {featured.map((r, i) => (
+                      <ResourceCard key={r.id} resource={r} index={i} />
+                    ))}
+                  </MasonryGrid>
+                )}
             </div>
           </section>
         )}
@@ -180,11 +187,11 @@ export function HomePage() {
               ))}
             </div>
           ) : (
-            <div className="mt-6 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+            <MasonryGrid className="mt-6 lg:columns-4">
               {latest.map((r, i) => (
                 <ResourceCard key={r.id} resource={r} index={i} />
               ))}
-            </div>
+            </MasonryGrid>
           )}
         </section>
 
